@@ -1216,9 +1216,10 @@ public class VSBattleMode extends AbstractMode {
 		if (((lines == 0) || (!garbageBlocking[playerID])) && (garbage[playerID] > 0)) {
 			engine.playSE("garbage");
 
-			while (!garbageEntries[playerID].isEmpty()) {
+			if (!garbageEntries[playerID].isEmpty()) {
 				GarbageEntry garbageEntry = garbageEntries[playerID].poll();
 				int garbageColor = PLAYER_COLOR_BLOCK[garbageEntry.playerID];
+				garbage[playerID] -= garbageEntry.lines;
 
 				if (garbageEntry.lines > 0) {
 					int hole = lastHole[playerID];
@@ -1259,7 +1260,6 @@ public class VSBattleMode extends AbstractMode {
 
 						engine.field.addSingleHoleGarbage(hole, garbageColor, engine.getSkin(), garbage[playerID]);
 						garbageEntries[playerID].clear();
-						break;
 					} else if (garbageType[playerID] == GARBAGE_TYPE_NOCHANGE_ONE_ATTACK) {
 						// garbage blockThe position of the holes in the1Of times Attack I will not
 						// change(2If you change more than once)
@@ -1281,8 +1281,6 @@ public class VSBattleMode extends AbstractMode {
 					lastHole[playerID] = hole;
 				}
 			}
-
-			garbage[playerID] = 0;
 		}
 
 		// HURRY UP!
