@@ -66,7 +66,7 @@ public class VSBattleMode extends AbstractMode {
 							 EVENT_TSPIN_EZ = 10;
 
 	/** Combo attack table */
-	private final int[] COMBO_ATTACK_TABLE = {0,0,1,1,2,2,3,3,4,4,4,5};
+	private final int[] COMBO_ATTACK_TABLE = {0,0,1,1,1,1,2,2,2,2,2,3};
 
 	/** garbage blockChanges to the position of the holes in the normally random */
 	private final int GARBAGE_TYPE_NORMAL = 0;
@@ -620,7 +620,7 @@ public class VSBattleMode extends AbstractMode {
 				}
 			}
 
-			// 決定
+			// æ±ºå®š
 			if(engine.ctrl.isPush(Controller.BUTTON_A) && (menuTime >= 5)) {
 				engine.playSE("decide");
 
@@ -642,7 +642,7 @@ public class VSBattleMode extends AbstractMode {
 				engine.quitflag = true;
 			}
 
-			// プレビュー用Map読み込み
+			// ãƒ—ãƒ¬ãƒ“ãƒ¥ãƒ¼ç”¨Mapèª­ã�¿è¾¼ã�¿
 			if(useMap[playerID] && (menuTime == 0)) {
 				loadMapPreview(engine, playerID, (mapNumber[playerID] < 0) ? 0 : mapNumber[playerID], true);
 			}
@@ -951,6 +951,8 @@ public class VSBattleMode extends AbstractMode {
 			int pts = 0;
 			int ptsB2B = 0;
 			scgettime[playerID] = 0;
+			
+			int multiplierThres = 2;
 
 			if(engine.tspin) {
 				// Immobile EZ Spin
@@ -964,6 +966,9 @@ public class VSBattleMode extends AbstractMode {
 				}
 				// T-Spin 1 line
 				else if(lines == 1) {
+					if (engine.combo >= multiplierThres) {
+						pts += engine.combo - 1;
+					}
 					if(engine.tspinmini) {
 						if(engine.useAllSpinBonus) {
 							//pts += 0;
@@ -978,6 +983,9 @@ public class VSBattleMode extends AbstractMode {
 				}
 				// T-Spin 2 lines
 				else if(lines == 2) {
+					if (engine.combo >= multiplierThres) {
+						pts += engine.combo - 1;
+					}
 					if(engine.tspinmini && engine.useAllSpinBonus) {
 						pts += 3;
 						lastevent[playerID] = EVENT_TSPIN_DOUBLE_MINI;
@@ -988,6 +996,9 @@ public class VSBattleMode extends AbstractMode {
 				}
 				// T-Spin 3 lines
 				else if(lines >= 3) {
+					if (engine.combo >= multiplierThres) {
+						pts += engine.combo - 1;
+					}
 					pts += 6;
 					lastevent[playerID] = EVENT_TSPIN_TRIPLE;
 				}
@@ -1002,6 +1013,9 @@ public class VSBattleMode extends AbstractMode {
 					pts += 2; // 3Column
 					lastevent[playerID] = EVENT_TRIPLE;
 				} else if(lines >= 4) {
+					if (engine.combo >= multiplierThres) {
+						pts += engine.combo - 1;
+					}
 					pts += 4; // 4 lines
 					lastevent[playerID] = EVENT_FOUR;
 				}
