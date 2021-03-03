@@ -67,6 +67,10 @@ public class VSBattleMode extends AbstractMode {
 
 	/** Combo attack table */
 	private final int[] COMBO_ATTACK_TABLE = {0,0,1,1,1,1,2,2,2,2,2,3};
+	
+	/** B2B chaining table */
+	private final int[] B2B_CHAIN_TABLE = {1,1,2,2,2,2,2,3,3,3,3,3,4,4,4,4,4,4,5};
+	private int numB2b = 0;
 
 	/** garbage blockChanges to the position of the holes in the normally random */
 	private final int GARBAGE_TYPE_NORMAL = 0;
@@ -1024,18 +1028,27 @@ public class VSBattleMode extends AbstractMode {
 			// B2B
 			if(engine.b2b) {
 				lastb2b[playerID] = true;
+				numB2b++;
 
 				if(pts > 0) {
+					// b2b chaining
+					int b2bindex = numB2b - 1;
+					if (b2bindex >= B2B_CHAIN_TABLE.length) b2bindex = B2B_CHAIN_TABLE.length - 1;
+					ptsB2B += B2B_CHAIN_TABLE[b2bindex];
+					
+					/*
 					if((version >= 1) && (lastevent[playerID] == EVENT_TSPIN_TRIPLE) && (!engine.useAllSpinBonus))
 						ptsB2B += 2;
 					else
 						ptsB2B += 1;
+						*/
 
 					if(b2bType[playerID] == 1)
 						pts += ptsB2B;	// Non-separated B2B
 				}
 			} else {
 				lastb2b[playerID] = false;
+				numB2b = 0;
 			}
 
 			// Combo
@@ -1050,9 +1063,9 @@ public class VSBattleMode extends AbstractMode {
 			// All clear
 			if((lines >= 1) && (engine.field.isEmpty())) {
 				engine.playSE("bravo");
-				pts += 6;
+				pts += 10;
 			}
-
+		
 			// gem block attack
 			pts += engine.field.getHowManyGemClears();
 
