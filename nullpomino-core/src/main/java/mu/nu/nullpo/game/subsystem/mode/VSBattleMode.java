@@ -205,7 +205,7 @@ public class VSBattleMode extends AbstractMode {
 	/** Passthrough */
 	private boolean[] startPassthrough;
 	private long[] passthroughStartTime;
-	private static final int PASSTHROUGH_TIME = 500;
+	private static final int PASSTHROUGH_TIME = 750;
 
 	/*
 	 * Mode name
