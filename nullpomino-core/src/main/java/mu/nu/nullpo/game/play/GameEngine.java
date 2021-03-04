@@ -923,7 +923,7 @@ public class GameEngine {
 		startTime = 0;
 		endTime = 0;
 
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			owner.mode.playerInit(this, playerID);
 			if(owner.replayMode) owner.mode.loadReplay(this, playerID, owner.replayProp);
@@ -1136,7 +1136,7 @@ public class GameEngine {
 	}
 
 	/**
-	 * SoftHard drop· Hold preceding precedingrotationRestrictions on the use of release
+	 * SoftHard dropÂ· Hold preceding precedingrotationRestrictions on the use of release
 	 */
 	public void checkDropContinuousUse() {
 		if(gameActive) {
@@ -1492,7 +1492,7 @@ public class GameEngine {
 		if((ctrl.isPress(Controller.BUTTON_D)) && (ruleopt.holdInitial == true) && isHoldOK()) {
 			initialHoldFlag = true;
 			initialHoldContinuousUse = true;
-			playSE("initialhold");
+			if (ai == null) playSE("initialhold");
 		}
 	}
 
@@ -1734,7 +1734,7 @@ public class GameEngine {
 		//  button input timeUpdates
 		ctrl.updateButtonTime();
 
-		// 最初の処理
+		// æœ€åˆ�ã�®å‡¦ç�†
 		if(owner.mode != null) owner.mode.onFirst(this, playerID);
 		owner.receiver.onFirst(this, playerID);
 		if((ai != null) && (!owner.replayMode || owner.replayRerecord)) ai.onFirst(this, playerID);
@@ -1794,7 +1794,7 @@ public class GameEngine {
 		fieldUpdate();
 		if((ending == 0) || (staffrollEnableStatistics)) statistics.update();
 
-		// 最後の処理
+		// æœ€å¾Œã�®å‡¦ç�†
 		if(owner.mode != null) owner.mode.onLast(this, playerID);
 		owner.receiver.onLast(this, playerID);
 		if((ai != null) && (!owner.replayMode || owner.replayRerecord)) ai.onLast(this, playerID);
@@ -1816,7 +1816,7 @@ public class GameEngine {
 	 *  (EachMode Ya event Processing classes event Just call, OtherwiseGameEngineItself does not do anything)
 	 */
 	public void render() {
-		// 最初の処理
+		// æœ€åˆ�ã�®å‡¦ç�†
 		owner.receiver.renderFirst(this, playerID);
 		if(owner.mode != null) owner.mode.renderFirst(this, playerID);
 
@@ -1892,7 +1892,7 @@ public class GameEngine {
 				ai.renderHint(this, playerID);
 		}
 
-		// 最後の処理
+		// æœ€å¾Œã�®å‡¦ç�†
 		if(owner.mode != null) owner.mode.renderLast(this, playerID);
 		owner.receiver.renderLast(this, playerID);
 	}
@@ -1901,22 +1901,22 @@ public class GameEngine {
 	 * Processing when the setup screen before the start of
 	 */
 	public void statSetting() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onSetting(this, playerID) == true) return;
 		}
 		owner.receiver.onSetting(this, playerID);
 
-		// Mode側が何もしない場合はReady画面へ移動
+		// Modeå�´ã�Œä½•ã‚‚ã�—ã�ªã�„å ´å�ˆã�¯Readyç”»é�¢ã�¸ç§»å‹•
 		stat = Status.READY;
 		resetStatc();
 	}
 
 	/**
-	 * Ready→GoProcessing time
+	 * Readyâ†’GoProcessing time
 	 */
 	public void statReady() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onReady(this, playerID) == true) return;
 		}
@@ -2006,7 +2006,7 @@ public class GameEngine {
 
 		// NEXTSkip
 		if((statc[0] > 0) && (statc[0] < goEnd) && (holdButtonNextSkip) && (isHoldOK()) && (ctrl.isPush(Controller.BUTTON_D))) {
-			playSE("initialhold");
+			if (ai == null) playSE("initialhold");
 			holdPieceObject = getNextObjectCopy(nextPieceCount);
 			holdPieceObject.applyOffsetArray(ruleopt.pieceOffsetX[holdPieceObject.id], ruleopt.pieceOffsetY[holdPieceObject.id]);
 			nextPieceCount++;
@@ -2038,7 +2038,7 @@ public class GameEngine {
 	public void statMove() {
 		dasRepeat = false;
 
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onMove(this, playerID) == true) return;
 		}
@@ -2121,7 +2121,7 @@ public class GameEngine {
 				initialHoldFlag = false;
 				holdDisable = true;
 			}
-			playSE("piece" + getNextObject(nextPieceCount).id);
+			if (ai == null) playSE("piece" + getNextObject(nextPieceCount).id);
 
 			if(nowPieceObject.offsetApplied == false)
 				nowPieceObject.applyOffsetArray(ruleopt.pieceOffsetX[nowPieceObject.id], ruleopt.pieceOffsetY[nowPieceObject.id]);
@@ -2191,7 +2191,9 @@ public class GameEngine {
 				if(isHoldOK()) {
 					statc[0] = 0;
 					statc[1] = 1;
-					if(!initialHoldFlag) playSE("hold");
+					if(!initialHoldFlag) {
+						if (ai == null) playSE("hold");
+					}
 					initialHoldContinuousUse = true;
 					initialHoldFlag = false;
 					holdDisable = true;
@@ -2212,7 +2214,7 @@ public class GameEngine {
 				move = initialRotateDirection;
 				initialRotateLastDirection = initialRotateDirection;
 				initialRotateContinuousUse = true;
-				playSE("initialrotate");
+				if (ai == null) playSE("initialrotate");
 			} else if((statc[0] > 0) || (ruleopt.moveFirstFrame == true)) {
 				if((itemRollRollEnable) && (replayTimer % itemRollRollInterval == 0)) move = 1;	// Roll Roll
 
@@ -2302,7 +2304,7 @@ public class GameEngine {
 					}
 
 					if(initialRotateDirection == 0) {
-						playSE("rotate");
+						if (ai == null) playSE("rotate");
 					}
 
 					nowPieceRotateCount++;
@@ -2379,7 +2381,9 @@ public class GameEngine {
 							nowPieceX += move;
 
 							if((getDASDelay() == 0) && (dasCount > 0) && (nowPieceObject.checkCollision(nowPieceX + move, nowPieceY, field) == false)) {
-								if(!dasInstant) playSE("move");
+								if(!dasInstant) {
+									if (ai == null) playSE("move");
+								}
 								dasRepeat = true;
 								dasInstant = true;
 							}
@@ -2402,7 +2406,9 @@ public class GameEngine {
 								lastmove = LastMove.SLIDE_AIR;
 							}
 
-							if(!dasInstant) playSE("move");
+							if(!dasInstant) {
+								if (ai == null) playSE("move");
+							}
 
 						} else if (ruleopt.dasChargeOnBlockedMove) {
 							dasCount = getDAS();
@@ -2427,7 +2433,7 @@ public class GameEngine {
 	
 					if(nowPieceY != nowPieceBottomY) {
 						nowPieceY = nowPieceBottomY;
-						playSE("harddrop");
+						if (ai == null) playSE("harddrop");
 					}
 	
 					if(owner.mode != null) owner.mode.afterHardDropFall(this, playerID, harddropFall);
@@ -2506,7 +2512,7 @@ public class GameEngine {
 					lastmove = LastMove.FALL_SELF;
 					softdropFall++;
 					softdropFallNow++;
-					playSE("softdrop");
+					if (ai == null) playSE("softdrop");
 				} else {
 					lastmove = LastMove.FALL_AUTO;
 				}
@@ -2525,7 +2531,7 @@ public class GameEngine {
 			((statc[0] > 0) || (ruleopt.moveFirstFrame == true)) )
 		{
 			if((lockDelayNow == 0) && (getLockDelay() > 0))
-				playSE("step");
+				if (ai == null) playSE("step");
 
 			if(lockDelayNow < getLockDelay())
 				lockDelayNow++;
@@ -2603,7 +2609,7 @@ public class GameEngine {
 			if( ((lockDelayNow >= getLockDelay()) && (getLockDelay() > 0)) || (instantlock == true) ) {
 				if(ruleopt.lockflash > 0) nowPieceObject.setDarkness(-0.8f);
 
-				// T-Spin判定
+				// T-Spinåˆ¤å®š
 				if(((lastmove == LastMove.ROTATE_GROUND) || (lastmove == LastMove.ROTATE_AIR)) && (tspinEnable == true)) {
 					if(useAllSpinBonus)
 						setAllSpin(nowPieceX, nowPieceY, nowPieceObject, field);
@@ -2616,7 +2622,7 @@ public class GameEngine {
 				boolean partialLockOut = nowPieceObject.isPartialLockOut(nowPieceX, nowPieceY, field);
 				boolean put = nowPieceObject.placeToField(nowPieceX, nowPieceY, field);
 
-				playSE("lock");
+				if (ai == null) playSE("lock");
 
 				holdDisable = false;
 
@@ -2655,7 +2661,7 @@ public class GameEngine {
 				dasRepeat = false;
 				dasInstant = false;
 
-				// Next 処理を決める(Mode 側でステータスを弄っている場合は何もしない)
+				// Next å‡¦ç�†ã‚’æ±ºã‚�ã‚‹(Mode å�´ã�§ã‚¹ãƒ†ãƒ¼ã‚¿ã‚¹ã‚’å¼„ã�£ã�¦ã�„ã‚‹å ´å�ˆã�¯ä½•ã‚‚ã�—ã�ªã�„)
 				if((stat == Status.MOVE) || (versionMajor <= 6.3f)) {
 					resetStatc();
 
@@ -2663,7 +2669,7 @@ public class GameEngine {
 						// Ending
 						stat = Status.ENDINGSTART;
 					} else if( (!put && ruleopt.fieldLockoutDeath) || (partialLockOut && ruleopt.fieldPartialLockoutDeath) ) {
-						// 画面外に置いて死亡
+						// ç”»é�¢å¤–ã�«ç½®ã�„ã�¦æ­»äº¡
 						stat = Status.GAMEOVER;
 						if((ending == 2) && (staffrollNoDeath)) stat = Status.NOTHING;
 					} else if ((lineGravityType == LineGravity.CASCADE || lineGravityType == LineGravity.CASCADE_SLOW)
@@ -2678,7 +2684,7 @@ public class GameEngine {
 					} else if( ((getARE() > 0) || (lagARE) || (ruleopt.lockflashBeforeLineClear)) &&
 							    (ruleopt.lockflash > 0) && (ruleopt.lockflashOnlyFrame) )
 					{
-						// AREあり (光あり）
+						// AREã�‚ã‚Š (å…‰ã�‚ã‚Šï¼‰
 						stat = Status.LOCKFLASH;
 					} else if((getARE() > 0) || (lagARE)) {
 						// ARESome (No light)
@@ -2690,7 +2696,7 @@ public class GameEngine {
 						interruptItemPreviousStat = Status.MOVE;
 						stat = Status.INTERRUPTITEM;
 					} else {
-						// AREなし
+						// AREã�ªã�—
 						stat = Status.MOVE;
 						if(ruleopt.moveFirstFrame == false) statMove();
 					}
@@ -2713,7 +2719,7 @@ public class GameEngine {
 	 * BlockSparkling happens when fixed immediately after
 	 */
 	public void statLockFlash() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onLockFlash(this, playerID) == true) return;
 		}
@@ -2748,7 +2754,7 @@ public class GameEngine {
 	 * Line clearProcessing
 	 */
 	public void statLineClear() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onLineClear(this, playerID) == true) return;
 		}
@@ -2766,7 +2772,7 @@ public class GameEngine {
 				field.setBlockLinkByColor();
 			if (sticky == 2)
 				field.setAllAttribute(Block.BLOCK_ATTRIBUTE_IGNORE_BLOCKLINK, true);
-			// Line clear flagを設定
+			// Line clear flagã‚’è¨­å®š
 			if (clearMode == ClearType.LINE)
 				lineClearing = field.checkLine();
 			// Set color clear flags
@@ -2855,7 +2861,7 @@ public class GameEngine {
 			if(owner.mode != null) owner.mode.calcScore(this, playerID, li);
 			owner.receiver.calcScore(this, playerID, li);
 
-			// Blockを消す演出を出す (まだ実際には消えていない）
+			// Blockã‚’æ¶ˆã�™æ¼”å‡ºã‚’å‡ºã�™ (ã�¾ã� å®Ÿéš›ã�«ã�¯æ¶ˆã�ˆã�¦ã�„ã�ªã�„ï¼‰
 			if (clearMode == ClearType.LINE) {
 				for(int i = 0; i < field.getHeight(); i++) {
 					if(field.getLineFlag(i)) {
@@ -2890,7 +2896,7 @@ public class GameEngine {
 					}
 				}
 
-			// Blockを消す
+			// Blockã‚’æ¶ˆã�™
 			if (clearMode == ClearType.LINE)
 				field.clearLine();
 			else if (clearMode == ClearType.COLOR)
@@ -2901,7 +2907,7 @@ public class GameEngine {
 				lineClearing = field.gemClearColor(colorClearSize, garbageColorClear, ignoreHidden);
 		}
 
-		// Linesを1段落とす
+		// Linesã‚’1æ®µè�½ã�¨ã�™
 		if((lineGravityType == LineGravity.NATIVE) &&
 		   (getLineDelay() >= (lineClearing - 1)) && (statc[0] >= getLineDelay() - (lineClearing - 1)) && (ruleopt.lineFallAnim))
 		{
@@ -3011,7 +3017,7 @@ public class GameEngine {
 	 * AREProcessing during
 	 */
 	public void statARE() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onARE(this, playerID) == true) return;
 		}
@@ -3049,7 +3055,7 @@ public class GameEngine {
 			resetStatc();
 
 			if(interruptItemNumber != INTERRUPTITEM_NONE) {
-				// 中断効果のあるアイテム処理
+				// ä¸­æ–­åŠ¹æžœã�®ã�‚ã‚‹ã‚¢ã‚¤ãƒ†ãƒ å‡¦ç�†
 				interruptItemPreviousStat = Status.MOVE;
 				stat = Status.INTERRUPTITEM;
 			} else {
@@ -3064,7 +3070,7 @@ public class GameEngine {
 	 * EndingRush processing
 	 */
 	public void statEndingStart() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onEndingStart(this, playerID) == true) return;
 		}
@@ -3122,7 +3128,7 @@ public class GameEngine {
 	 * Each gameMode Treatment of status that can be freely used
 	 */
 	public void statCustom() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onCustom(this, playerID) == true) return;
 		}
@@ -3133,7 +3139,7 @@ public class GameEngine {
 	 * EndingScreen
 	 */
 	public void statExcellent() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onExcellent(this, playerID) == true) return;
 		}
@@ -3164,7 +3170,7 @@ public class GameEngine {
 	 * game overProcessing
 	 */
 	public void statGameOver() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onGameOver(this, playerID) == true) return;
 		}
@@ -3293,7 +3299,7 @@ public class GameEngine {
 	 * fieldEdit screen
 	 */
 	public void statFieldEdit() {
-		//  event 発生
+		//  event ç™ºç”Ÿ
 		if(owner.mode != null) {
 			if(owner.mode.onFieldEdit(this, playerID) == true) return;
 		}
@@ -3303,22 +3309,22 @@ public class GameEngine {
 
 		// Cursor movement
 		if(ctrl.isMenuRepeatKey(Controller.BUTTON_LEFT, false) && !ctrl.isPress(Controller.BUTTON_C)) {
-			playSE("move");
+			if (ai == null) playSE("move");
 			fldeditX--;
 			if(fldeditX < 0) fldeditX = fieldWidth - 1;
 		}
 		if(ctrl.isMenuRepeatKey(Controller.BUTTON_RIGHT, false) && !ctrl.isPress(Controller.BUTTON_C)) {
-			playSE("move");
+			if (ai == null) playSE("move");
 			fldeditX++;
 			if(fldeditX > fieldWidth - 1) fldeditX = 0;
 		}
 		if(ctrl.isMenuRepeatKey(getUp(), false)) {
-			playSE("move");
+			if (ai == null) playSE("move");
 			fldeditY--;
 			if(fldeditY < 0) fldeditY = fieldHeight - 1;
 		}
 		if(ctrl.isMenuRepeatKey(getDown(), false)) {
-			playSE("move");
+			if (ai == null) playSE("move");
 			fldeditY++;
 			if(fldeditY > fieldHeight - 1) fldeditY = 0;
 		}
