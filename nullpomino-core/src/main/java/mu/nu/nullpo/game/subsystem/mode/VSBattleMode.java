@@ -83,7 +83,7 @@ public class VSBattleMode extends AbstractMode {
 	private final String[] GARBAGE_TYPE_STRING = { "NORMAL", "ONE RISE", "1-ATTACK" };
 
 	/** Each player's garbage block color */
-	private final int[] PLAYER_COLOR_BLOCK = { Block.BLOCK_COLOR_RED, Block.BLOCK_COLOR_BLUE };
+	private final int[] PLAYER_COLOR_BLOCK = { Block.BLOCK_COLOR_GRAY, Block.BLOCK_COLOR_GRAY };
 
 	/** Each player's frame color */
 	private final int[] PLAYER_COLOR_FRAME = { GameEngine.FRAME_COLOR_RED, GameEngine.FRAME_COLOR_BLUE };
@@ -205,7 +205,7 @@ public class VSBattleMode extends AbstractMode {
 	/** Passthrough */
 	private boolean[] startPassthrough;
 	private long[] passthroughStartTime;
-	private static final int PASSTHROUGH_TIME = 750;
+	private static final int PASSTHROUGH_TIME = 500;
 
 	/*
 	 * Mode name

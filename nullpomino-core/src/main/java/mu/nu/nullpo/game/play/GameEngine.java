@@ -832,7 +832,7 @@ public class GameEngine {
 
 		blockHidden = -1;
 		blockHiddenAnim = true;
-		blockOutlineType = BLOCK_OUTLINE_NORMAL;
+		blockOutlineType = BLOCK_OUTLINE_NONE;
 		blockShowOutlineOnly = false;
 
 		heboHiddenEnable = false;
